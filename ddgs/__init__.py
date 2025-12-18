@@ -6,9 +6,9 @@ A metasearch library that aggregates results from diverse web search services.
 import importlib
 import logging
 import threading
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
-__version__ = "9.9.1"
+__version__ = "9.10.0"
 __all__ = ("DDGS",)
 
 if TYPE_CHECKING:
@@ -45,5 +45,8 @@ class _ProxyMeta(type):
         return sorted(base | (loaded_names - base))
 
 
-class DDGS(metaclass=_ProxyMeta):  # type: ignore[no-redef]
+class _DDGSProxy(metaclass=_ProxyMeta):
     """Proxy class for lazy-loading the real DDGS implementation."""
+
+
+DDGS: type[DDGS] = cast("type[DDGS]", _DDGSProxy)  # type: ignore[no-redef]
